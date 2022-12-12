@@ -25,6 +25,10 @@ class DeviceError(Enum):
     SensorFailure = 4
     Unknown = 8
 
+    @classmethod
+    def list(cls, error_code: int):
+        return [e for e in cls if e.value & error_code]
+
 
 class Device:
     def __init__(self, client: Client, node: Node):
@@ -48,8 +52,11 @@ class Device:
 
         return variables
 
+    async def get_node(self, prop: DeviceProp):
+        return (await self.properties)[prop.value]
+
     async def read_value(self, prop: DeviceProp):
-        return await (await self.properties)[prop.value].read_value()
+        return await (await self.get_node(prop)).read_value()
 
     async def write_value(self, prop: DeviceProp, value):
         property_node = (await self.properties)[prop.value]
