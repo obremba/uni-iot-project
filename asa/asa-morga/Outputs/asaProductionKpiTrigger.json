@@ -1,0 +1,13 @@
+{
+    "Name": "asaProductionKpiTrigger",
+    "DataSourceType": "Azure Function",
+    "AzureFunctionProperties": {
+        "FunctionAppName": "business-logic",
+        "FunctionName": "ProductionKpiTrigger",
+        "ApiKey": null,
+        "MaxBatchSize": 262144,
+        "MaxBatchCount": 100
+    },
+    "DataSourceCredentialDomain": null,
+    "ScriptType": "Output"
+}

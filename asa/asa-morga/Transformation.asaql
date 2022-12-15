@@ -1,0 +1,57 @@
+-- production per workorderId (sum of good and bad count)
+SELECT
+    WorkorderId,
+    SUM(GoodCount) AS GoodCountSum,
+    SUM(BadCount) AS BadCountSum,
+    System.Timestamp() AS WindowEndTime
+INTO asaGoodBadCount
+FROM iothub TIMESTAMP BY EventEnqueuedUtcTime
+GROUP BY
+    WorkorderId, TumblingWindow(minute , 15)
+
+-- production kpi
+SELECT
+    (SUM(GoodCount) / (SUM(GoodCount) + SUM(BadCount))) AS kpi,
+    System.Timestamp() AS WindowEndTime
+INTO asaProductionKPIs
+FROM iothub TIMESTAMP BY EventEnqueuedUtcTime
+GROUP BY
+    TumblingWindow(minute , 15)
+
+-- min, mean and max of temperature
+SELECT
+    WorkorderId,
+    AVG(Temperature) AS AverageTemperature,
+    MIN(Temperature) AS MinTemperature,
+    MAX(Temperature) AS MaxTemperature,
+    System.Timestamp() AS WindowEndTime
+INTO asaMachineTemperatures
+FROM iothub TIMESTAMP BY EventEnqueuedUtcTime
+GROUP BY
+    WorkorderId, TumblingWindow(minute , 5)
+
+-- errors within 15 minutes
+SELECT ih.IoTHub.ConnectionDeviceId as deviceId, COUNT(type) as errors
+INTO asaErrorPerMachine
+FROM iothub ih TIMESTAMP by EventEnqueuedUtcTime
+WHERE type = 'event'
+GROUP BY
+    type, ih.IoTHub.ConnectionDeviceId, TumblingWindow(minute , 15)
+HAVING count(type) > 3
+
+--- emergency stop trigger
+SELECT ih.IoTHub.ConnectionDeviceId as deviceId, COUNT(type) as errors
+INTO asaEmergencyStopTrigger
+FROM iothub ih TIMESTAMP by EventEnqueuedUtcTime
+WHERE type = 'event'
+GROUP BY
+    type, ih.IoTHub.ConnectionDeviceId, TumblingWindow(minute , 15)
+
+-- production kpi trigger
+SELECT
+    (SUM(GoodCount) / (SUM(GoodCount) + SUM(BadCount))) AS kpi,
+    System.Timestamp() AS WindowEndTime
+INTO asaProductionKpiTrigger
+FROM iothub TIMESTAMP BY EventEnqueuedUtcTime
+GROUP BY
+    TumblingWindow(minute , 15)

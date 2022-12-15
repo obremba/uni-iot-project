@@ -1,0 +1,13 @@
+{
+    "Name": "asaEmergencyStopTrigger",
+    "DataSourceType": "Azure Function",
+    "AzureFunctionProperties": {
+        "FunctionAppName": "business-logic",
+        "FunctionName": "EmergencyStopTrigger",
+        "ApiKey": null,
+        "MaxBatchSize": 262144,
+        "MaxBatchCount": 100
+    },
+    "DataSourceCredentialDomain": null,
+    "ScriptType": "Output"
+}

@@ -1,0 +1,38 @@
+{
+    "name": "asa-morga",
+    "startFile": "Transformation.asaql",
+    "configurations": [
+        {
+            "filePath": "Outputs/asaErrorPerMachine.json",
+            "subType": "Output"
+        },
+        {
+            "filePath": "Outputs/asaGoodBadCount.json",
+            "subType": "Output"
+        },
+        {
+            "filePath": "Outputs/asaMachineTemperatures.json",
+            "subType": "Output"
+        },
+        {
+            "filePath": "Outputs/asaProductionKPIs.json",
+            "subType": "Output"
+        },
+        {
+            "filePath": "Outputs/asaEmergencyStopTrigger.json",
+            "subType": "Output"
+        },
+        {
+            "filePath": "Outputs/asaProductionKpiTrigger.json",
+            "subType": "Output"
+        },
+        {
+            "filePath": "JobConfig.json",
+            "subType": "JobConfig"
+        },
+        {
+            "filePath": "Inputs/iothub.json",
+            "subType": "Input"
+        }
+    ]
+}
